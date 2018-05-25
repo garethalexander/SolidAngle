@@ -3,7 +3,7 @@
 
 Computing the Solid Angle Function About a Link
 
-Based on the article "Maxwell's Theory of Solid and the Construction of Knotted Vortex Field", Binysh J. and Alexander G.P (Ref. 1)
+Based on the article "Maxwell's Theory of Solid and the Construction of Knotted Fields", Binysh J. and Alexander G.P (Ref. 1)
 
 -----------------------------------------------------------------------------
 
@@ -18,7 +18,7 @@ If you find a bug, or have ideas for improvements, please email j.binysh@warwick
 This is a code to compute the solid angle function of a link from a user provided specification of its embedding in space. It implements eq. (3) of Ref. 1 to do so. 
 
 If you use this code, please cite:
-Binysh J., Alexander G.P, "Maxwell's Theory of Solid Angle and the Construction of Knotted Vortex Fields"
+Binysh J., Alexander G.P, "Maxwell's Theory of Solid Angle and the Construction of Knotted Fields"
 
 
 ------------------------------------------------------------------------------
@@ -157,4 +157,4 @@ Happy visualising!
 ----------------------------------------------------------------------------
 REFERENCES
 
-(1) "Maxwell's Theory of Solid and the Construction of Knotted Vortex Field", Binysh J. and Alexander G.P 
+(1) "Maxwell's Theory of Solid and the Construction of Knotted Fields", Binysh J. and Alexander G.P 

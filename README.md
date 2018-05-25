@@ -3,7 +3,7 @@
 
 Computing the Solid Angle Function About a Link
 
-Based on the article "Maxwell's Theory of Solid and the Construction of Knotted Fields", Binysh J. and Alexander G.P (Ref. 1)
+Based on the article "Maxwell's Theory of Solid Angle and the Construction of Knotted Fields", Binysh J. and Alexander G.P (Ref. 1)
 
 -----------------------------------------------------------------------------
 
@@ -157,4 +157,4 @@ Happy visualising!
 ----------------------------------------------------------------------------
 REFERENCES
 
-(1) "Maxwell's Theory of Solid and the Construction of Knotted Fields", Binysh J. and Alexander G.P 
+(1) "Maxwell's Theory of Solid Angle and the Construction of Knotted Fields", Binysh J. and Alexander G.P 

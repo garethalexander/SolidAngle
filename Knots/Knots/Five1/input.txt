@@ -1,0 +1,15 @@
+NumComponents=1
+NumRefinements=0
+h=0.5
+Nx=201
+Ny=201
+Nz=201
+Scaling=1
+ScaleProportionally=1
+BoxFractionx= 0.6 
+BoxFractiony= 0.6 
+BoxFractionz= 0.6 
+Initialninftyx = 0
+Initialninftyy = 0
+Initialninftyz = 1
+Threshold_ninf_dot_n=-0.9

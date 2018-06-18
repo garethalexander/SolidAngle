@@ -83,6 +83,11 @@ void ComputeSolidAngleAllPoints(const Link& Curve,vector<double>& omega);
 // we pick a new one at random, and keep trying. Its output is standardised to the range 0 to 4 pi
 double ComputeSolidAngleOnePoint(const Link& Curve, const viewpoint& View);
 
+// ditto for the gradient of the solid angle function, if the user has asked from them
+// to be directly computed. This is done via the Biot-Savart law.
+void ComputeGradientAllPoints(const Link& Curve,vector<double>& Bx,vector<double>& By,vector<double>& Bz);
+void ComputeGradientOnePoint(const Link& Curve,const viewpoint View, double& Bx, double& By, double& Bz);
+
 // periodic incrementer - increase (or decrease if -ve) i by p, wrapping around at N
 int incp(int i, int p, int N);
 

@@ -30,4 +30,6 @@ extern double BoxFractionx, BoxFractiony, BoxFractionz;
 extern double Initialninftyx,Initialninftyy,Initialninftyz;
 // The users initial choice of the vector n_infty. Normalise it!
 extern double Threshold_ninf_dot_n;
+// Do you want to output the gradient of the solid angle function?
+extern bool Gradient;
 #endif

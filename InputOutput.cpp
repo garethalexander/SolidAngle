@@ -124,6 +124,13 @@ int InitialiseSystemParameters()
             getline(ss15,buff2,'=');
             ss15 >> Threshold_ninf_dot_n;
         }
+        stringstream ss16;
+        if(getline(CurveInputStream,buff))
+        {
+            ss15 << buff;
+            getline(ss15,buff2,'=');
+            ss15 >> Gradient;
+        }
     }
     else
     {
@@ -213,7 +220,7 @@ int InitialiseFromFile(Link& Curve)
     return 0;
 }
 
-void OutputSolidAngle(const Link& Curve,const vector<double>& omega,const string filename)
+void OutputSolidAngle(const vector<double>& omega,const string filename)
 {
     string fn = "Knots/" + knot_filename + "/" + filename+".vtk";
     ofstream Aout (fn.c_str());
@@ -231,6 +238,30 @@ void OutputSolidAngle(const Link& Curve,const vector<double>& omega,const string
             {
                 int n = pt(i,j,k);
                 Aout << omega[n] << '\n';
+            }
+        }
+    }
+    Aout.close();
+}
+
+void OutputGradient(const vector<double>& Bx,const vector<double>& By,const vector<double>& Bz, const string filename)
+{
+    string fn = "Knots/" + knot_filename + "/" + filename+".vtk";
+    ofstream Aout (fn.c_str());
+    Aout << "# vtk DataFile Version 3.0\nKnot\nASCII\nDATASET STRUCTURED_POINTS\n";
+    Aout << "DIMENSIONS " << Nx << ' ' << Ny << ' ' << Nz << '\n';
+    Aout << "ORIGIN " << x(0) << ' ' << y(0) << ' ' << z(0) << '\n';
+    Aout << "SPACING " << h << ' ' << h << ' ' << h << '\n';
+    Aout << "POINT_DATA " << Nx*Ny*Nz << '\n';
+    Aout << "VECTORS B float";
+    for(int k=0; k<Nz; k++)
+    {
+        for(int j=0; j<Ny; j++)
+        {
+            for(int i=0; i<Nx; i++)
+            {
+                int n = pt(i,j,k);
+                Aout << Bx[n] <<' '<< By[n]<<' '<<Bz[n] <<'\n';
             }
         }
     }

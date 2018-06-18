@@ -1,10 +1,10 @@
-#include "SolidAngle.h"    
-#include "Geometry.h"
-#include "InputOutput.h"
-#include "Constants.h"
 #include <math.h>
 #include <cmath>
 #include <string.h>
+#include "SolidAngle.h"
+#include "Geometry.h"
+#include "InputOutput.h"
+#include "Constants.h"
 
 #ifdef _OPENMP
 #include <omp.h>
@@ -26,6 +26,16 @@ int main (int argc, char*argv[])
         // omega is a 3D grid of solid angle values in space around our curve. It's stored in row-major order
         // with the origin of physical space in its centre.
         vector<double>omega(Nx*Ny*Nz);
+        vector<double>Bx(0);
+        vector<double>By(0);
+        vector<double>Bz(0);
+        // If the user wants the gradient of the solid angle computed directly too, arrays for its components
+        if(Gradient)
+        {
+            Bx.resize(Nx*Ny*Nz);
+            By.resize(Nx*Ny*Nz);
+            Bz.resize(Nx*Ny*Nz);
+        }
         // all data read in or computed about the curve itself is stored in this data structure.
         Link Curve;
         if(0==InitialiseFromFile(Curve))
@@ -37,15 +47,21 @@ int main (int argc, char*argv[])
             ComputeSolidAngleAllPoints(Curve,omega);
 
             cout << "Printing the solid angle and the scaled knot \n";
-            OutputSolidAngle(Curve,omega,knot_filename+"_0_4pi");
+            OutputSolidAngle(omega,knot_filename+"_0_4pi");
             for (int n=0; n<Nx*Ny*Nz; n++)
             {
                 while(omega[n]>2*M_PI) omega[n] -= 4*M_PI;
                 while(omega[n]<-2*M_PI) omega[n]+= 4*M_PI;
             }
-            OutputSolidAngle(Curve,omega,knot_filename+"_-2pi_2pi");
-
+            OutputSolidAngle(omega,knot_filename+"_-2pi_2pi");
             OutputScaledKnot(Curve);
+
+            if(Gradient)
+            {
+                ComputeGradientAllPoints(Curve,Bx,By,Bz);
+                OutputGradient(Bx,By,Bz,knot_filename+"_Gradient");
+            }
+
             return 0;
         }
     }
@@ -183,6 +199,87 @@ void ComputeSolidAngleAllPoints(const Link& Curve,vector<double>& omega)
             if (( ((double)(i)/Nx)*100 )> progressbarcounter )
             {
                 cout<< progressbarcounter << "%" << endl;
+                progressbarcounter += 10;
+            }
+#endif
+        }
+    }
+
+}
+void ComputeGradientOnePoint(const Link& Curve, const viewpoint View, double& Bx, double& By, double& Bz)
+{
+    double internalBx=0;
+    double internalBy=0;
+    double internalBz=0;
+    for(int i=0; i<Curve.NumComponents; i++)
+    {
+        int NP = Curve.Components[i].knotcurve.size();
+
+        for (int s=0; s<NP; s++)
+        {
+            double viewx = Curve.Components[i].knotcurve[s].xcoord - View.xcoord;
+            double viewy = Curve.Components[i].knotcurve[s].ycoord - View.ycoord;
+            double viewz = Curve.Components[i].knotcurve[s].zcoord - View.zcoord;
+            double distcube = sqrt(  (viewx*viewx + viewy*viewy + viewz*viewz)*(viewx*viewx + viewy*viewy + viewz*viewz)*(viewx*viewx + viewy*viewy + viewz*viewz) );
+            double tx = Curve.Components[i].knotcurve[s].tx;
+            double ty = Curve.Components[i].knotcurve[s].ty;
+            double tz = Curve.Components[i].knotcurve[s].tz;
+            double ds = 0.5*(Curve.Components[i].knotcurve[s].length+Curve.Components[i].knotcurve[incp(s,-1,NP)].length);
+            internalBx += ((ty*viewz-tz*viewy)/distcube)*ds;
+            internalBy += ((tz*viewx-tx*viewz)/distcube)*ds;
+            internalBz += ((tx*viewy-ty*viewx)/distcube)*ds;
+        }
+    }
+
+    Bx = internalBx;
+    By = internalBy;
+    Bz = internalBz;
+
+    return;
+}
+void ComputeGradientAllPoints(const Link& Curve,vector<double>& Bx,vector<double>& By,vector<double>& Bz)
+{
+
+#pragma omp parallel default(none) shared(Bx,By,Bz,Curve,Nx,Ny,Nz,cout)
+    {
+        viewpoint Point;
+        int progressbarcounter =0;
+
+#pragma omp for
+        for (int i=0; i<Nx; i++)
+        {
+            for (int j=0; j<Ny; j++)
+            {
+                for (int k=0; k<Nz; k++)
+                {
+                    Point.xcoord = x(i);
+                    Point.ycoord = y(j);
+                    Point.zcoord = z(k);
+
+                    double bx,by,bz;
+                    ComputeGradientOnePoint(Curve,Point,bx,by,bz);
+
+                    int n = pt(i,j,k);
+                    Bx[n]=bx;
+                    By[n]=by;
+                    Bz[n]=bz;
+                }
+            }
+            // progress bar!
+#ifdef _OPENMP
+            if(omp_get_thread_num() == 0)
+            {
+                if ((  ( ( ((double)i)*omp_get_num_threads() )/Nx ) * 100 ) > progressbarcounter)
+                {
+                    cout<< "gradient " << progressbarcounter << "%" << endl;
+                    progressbarcounter += 10;
+                }
+            }
+#endif
+#ifndef _OPENMP
+            if (( ((double)(i)/Nx)*100 )> progressbarcounter )
+            {
+                cout<<"gradient " << progressbarcounter << "%" << endl;
                 progressbarcounter += 10;
             }
 #endif

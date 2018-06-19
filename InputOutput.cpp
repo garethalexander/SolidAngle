@@ -127,9 +127,9 @@ int InitialiseSystemParameters()
         stringstream ss16;
         if(getline(CurveInputStream,buff))
         {
-            ss15 << buff;
-            getline(ss15,buff2,'=');
-            ss15 >> Gradient;
+            ss16 << buff;
+            getline(ss16,buff2,'=');
+            ss16 >> Gradient;
         }
     }
     else
@@ -253,7 +253,7 @@ void OutputGradient(const vector<double>& Bx,const vector<double>& By,const vect
     Aout << "ORIGIN " << x(0) << ' ' << y(0) << ' ' << z(0) << '\n';
     Aout << "SPACING " << h << ' ' << h << ' ' << h << '\n';
     Aout << "POINT_DATA " << Nx*Ny*Nz << '\n';
-    Aout << "VECTORS B float";
+    Aout << "VECTORS B float\n";
     for(int k=0; k<Nz; k++)
     {
         for(int j=0; j<Ny; j++)

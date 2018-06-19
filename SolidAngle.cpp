@@ -58,7 +58,9 @@ int main (int argc, char*argv[])
 
             if(Gradient)
             {
+                cout << "Beginning the Gradient Calculations \n";
                 ComputeGradientAllPoints(Curve,Bx,By,Bz);
+                cout << "Printing the Gradient \n";
                 OutputGradient(Bx,By,Bz,knot_filename+"_Gradient");
             }
 

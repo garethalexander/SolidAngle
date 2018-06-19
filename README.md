@@ -104,6 +104,8 @@ Three doubles. The 3 components of the vector n_infty described first in the sec
 Threshold_ninf_dot_n=-0.95
 A double between 0 and -1. The user defined threshold discussed in the section "Remarks on Numerical Implementation". It specifies when you consider the most negative value of n dot n_infty unacceptable (when your discretization starts missing the Lorentzian peaks near the surface of discontinuity). In practice, this is set somewhere between -0.9 and -0.8 --- just try -0.95, and if the answer has unacceptable artefacts, make it less negative.
 
+Gradient = 0
+A bool, indicating whether the code should additionally compute and output the gradient of the solid angle, as computed using the Biot-Savart law.
 ---
 
 (2) A file containing an ordered list (the ordering defining an orientation) of points also called <my_knot_name>.txt, with newlines between points and spaces separating the coordinates within points. If inputting a link (see the Whitehead Link example), provide each component in a separate file, the naming convention going <my_knot_name>_0.txt, <my_knot_name>_1.txt etc. Note the numbering is 0-based. 
@@ -116,7 +118,7 @@ Output goes inside the folder that you read in.
 The code outputs files in human (or grad student) readable .vtk format - the "legacy" format detailed at https://www.vtk.org/wp-content/uploads/2015/04/file-formats.pdf
 These files may be read into e.g. ParaView https://www.paraview.org/ for visualisation.
 
-It outputs 3 files
+It outputs 3 files if Gradient=0
 
 (1) A .vtk file containing the solid angle data on a 3D grid, in the range 0 to 4 pi, named <my_name>_0_4pi.vtk
 (2) "" in the range -2pi to 2pi, named <my_name>_-2pi_2pi.vtk
@@ -126,6 +128,8 @@ The two are useful to load simultaneously into ParaView - it will have a little 
 (3) The input knot, scaled if scalings were set, named ParaViewBoundaryCurve_<my_name>.obj in .obj format http://paulbourke.net/dataformats/obj/ so it can be loaded into Paraview and visualised along with the solid angle function.
 
 It also outputs progress to standard output, and error messages to standard error.
+
+If Gradient = 1, it additionally outputs a .vtk file containing the gradient vector of the solid angle on a 3D grid, named <my_name>____Gradient.vtk
 
 ----------------------------------------------------------------------------
 A BRIEF GUIDE TO POST-PROCESSING IN PARAVIEW

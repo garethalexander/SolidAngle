@@ -131,6 +131,10 @@ int InitialiseSystemParameters()
             getline(ss16,buff2,'=');
             ss16 >> Gradient;
         }
+        else
+        {
+            Gradient = 0;
+        }
     }
     else
     {

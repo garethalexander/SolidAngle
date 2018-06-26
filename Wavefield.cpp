@@ -1,7 +1,7 @@
 #include <math.h>
 #include <cmath>
 #include <string.h>
-#include "SolidAngle.h"
+#include "Wavefield.h"
 #include "Geometry.h"
 #include "InputOutput.h"
 #include "Constants.h"

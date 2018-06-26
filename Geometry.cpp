@@ -1,7 +1,6 @@
-
 #include "Geometry.h"
 #include "Constants.h"
-#include "SolidAngle.h"
+#include "Wavefield.h"
 
 void ComputeGeometry(Link& Curve)
 {

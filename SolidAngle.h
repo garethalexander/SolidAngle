@@ -75,18 +75,13 @@ struct viewpoint
 };
 
 // Runs through our 3D grid omega, and computes the solid angle at each point.
-void ComputeSolidAngleAllPoints(const Link& Curve,vector<double>& omega);
+void ComputeWavefieldAllPoints(const Link& Curve,vector<double>& omega);
 
 // All the real work of the code happens in this function - given a viewpoint, give me the solid angle subtended by the knot at that viewpoint.
 // this function implements the formula for this solid angle, \omega({\bf x}) = \int \frac{{\bf n}_{\infty} \times {\bf n} }{1+{\bf n}_\infty \cdot {\bf n}} \cdot \mathrm{d}{\bf n} ,
 // with a user defined threshold checking whether we are too close to a surface of discontinuity. If we are, we first swap from n_infty -> -n_infty and try again. If that doesn't work
 // we pick a new one at random, and keep trying. Its output is standardised to the range 0 to 4 pi
-double ComputeSolidAngleOnePoint(const Link& Curve, const viewpoint& View);
-
-// ditto for the gradient of the solid angle function, if the user has asked from them
-// to be directly computed. This is done via the Biot-Savart law.
-void ComputeGradientAllPoints(const Link& Curve,vector<double>& Bx,vector<double>& By,vector<double>& Bz);
-void ComputeGradientOnePoint(const Link& Curve,const viewpoint View, double& Bx, double& By, double& Bz);
+double ComputeWavefieldOnePoint(const Link& Curve, const viewpoint& View);
 
 // periodic incrementer - increase (or decrease if -ve) i by p, wrapping around at N
 int incp(int i, int p, int N);

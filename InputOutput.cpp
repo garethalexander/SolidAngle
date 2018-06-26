@@ -224,7 +224,7 @@ int InitialiseFromFile(Link& Curve)
     return 0;
 }
 
-void OutputSolidAngle(const vector<double>& omega,const string filename)
+void OutputWavefield(const vector<double>& omega,const string filename)
 {
     string fn = "Knots/" + knot_filename + "/" + filename+".vtk";
     ofstream Aout (fn.c_str());
@@ -233,7 +233,7 @@ void OutputSolidAngle(const vector<double>& omega,const string filename)
     Aout << "ORIGIN " << x(0) << ' ' << y(0) << ' ' << z(0) << '\n';
     Aout << "SPACING " << h << ' ' << h << ' ' << h << '\n';
     Aout << "POINT_DATA " << Nx*Ny*Nz << '\n';
-    Aout << "SCALARS omega float\nLOOKUP_TABLE default\n";
+    Aout << "SCALARS wavefield float\nLOOKUP_TABLE default\n";
     for(int k=0; k<Nz; k++)
     {
         for(int j=0; j<Ny; j++)
@@ -242,30 +242,6 @@ void OutputSolidAngle(const vector<double>& omega,const string filename)
             {
                 int n = pt(i,j,k);
                 Aout << omega[n] << '\n';
-            }
-        }
-    }
-    Aout.close();
-}
-
-void OutputGradient(const vector<double>& Bx,const vector<double>& By,const vector<double>& Bz, const string filename)
-{
-    string fn = "Knots/" + knot_filename + "/" + filename+".vtk";
-    ofstream Aout (fn.c_str());
-    Aout << "# vtk DataFile Version 3.0\nKnot\nASCII\nDATASET STRUCTURED_POINTS\n";
-    Aout << "DIMENSIONS " << Nx << ' ' << Ny << ' ' << Nz << '\n';
-    Aout << "ORIGIN " << x(0) << ' ' << y(0) << ' ' << z(0) << '\n';
-    Aout << "SPACING " << h << ' ' << h << ' ' << h << '\n';
-    Aout << "POINT_DATA " << Nx*Ny*Nz << '\n';
-    Aout << "VECTORS B float\n";
-    for(int k=0; k<Nz; k++)
-    {
-        for(int j=0; j<Ny; j++)
-        {
-            for(int i=0; i<Nx; i++)
-            {
-                int n = pt(i,j,k);
-                Aout << Bx[n] <<' '<< By[n]<<' '<<Bz[n] <<'\n';
             }
         }
     }

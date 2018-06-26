@@ -25,8 +25,6 @@ int InitialiseFromFile(struct Link& Curve);
 // Output the same curve as read in, but scaled if scaling was asked for, and in .vtk format, so it can be imported to e.g. Paraview
 void OutputScaledKnot(Link& Curve);
 // Output the grid of omega values computed to a file with user specified filename, in legacy .vtk format
-void OutputSolidAngle(const std::vector<double>& omega,const std::string filename);
+void OutputWavefield(const std::vector<double>& omega,const std::string filename);
 
-// Output the grid of gradient values
-void OutputGradient(const std::vector<double>& Bx,const std::vector<double>& By,const std::vector<double>& Bz, const std::string filename);
 #endif

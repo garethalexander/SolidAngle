@@ -37,6 +37,7 @@ struct knotpoint
     double ty;
     double tz;
     double length;
+    double integratedlength;
     double kappaNx;
     double kappaNy;
     double kappaNz;
@@ -59,6 +60,7 @@ struct Link
     double minx, maxx;
     double miny, maxy;
     double minz, maxz;
+    double length;
 };
 
 // A list of hardcoded directions to succesively try of the user inputted one gives n.n_infty exceeding the threshold.

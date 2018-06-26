@@ -22,8 +22,11 @@ void ComputeGeometry(Link& Curve)
 
 void ComputeLengths(Link& Curve)
 {
+    Curve.length=0;
+
     for(int i=0; i<Curve.NumComponents; i++)
     {
+        double RunningTotalComponentLength=0; 
         int NP = Curve.Components[i].knotcurve.size();
         for(int s=0; s<NP; s++)
         {
@@ -32,6 +35,11 @@ void ComputeLengths(Link& Curve)
             double dz = (Curve.Components[i].knotcurve[incp(s,1,NP)].zcoord - Curve.Components[i].knotcurve[s].zcoord);
             double deltas = sqrt(dx*dx+dy*dy+dz*dz);
             Curve.Components[i].knotcurve[s].length = deltas;
+            Curve.length+=deltas;
+
+            RunningTotalComponentLength += deltas;
+            Curve.Components[i].knotcurve[s].integratedlength = RunningTotalComponentLength;
+
         }
     }
 }

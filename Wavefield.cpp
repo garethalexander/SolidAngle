@@ -37,7 +37,7 @@ int main (int argc, char*argv[])
             ComputeWavefieldAllPoints(Curve,omega);
 
             cout << "Printing the solid angle and the scaled knot \n";
-            OutputWavefield(omega,knot_filename);
+            OutputWavefield(omega,knot_filename+"_Wavefield_offset");
             OutputScaledKnot(Curve);
 
             return 0;
@@ -50,7 +50,8 @@ double ComputeWavefieldOnePoint(const Link& Curve, const viewpoint& View)
 {
     double totalomega = 0;
     // the shortest distance between our point and the link - initial value is greater than any possible interbox distance
-    double WavefieldMinDist = 2*sqrt(Nx*h*Nx*h +Ny*h*Ny*h +Nz*h*Nz*h);
+    double WavefieldMinDistandOffset = 5*sqrt(Nx*h*Nx*h +Ny*h*Ny*h +Nz*h*Nz*h);
+
     for(int i=0; i<Curve.NumComponents; i++)
     {
         int NP = Curve.Components[i].knotcurve.size();
@@ -125,7 +126,12 @@ double ComputeWavefieldOnePoint(const Link& Curve, const viewpoint& View)
             double viewz = Curve.Components[i].knotcurve[s].zcoord - View.zcoord;
             double dist = sqrt(viewx*viewx + viewy*viewy + viewz*viewz);
 
-            if(dist<WavefieldMinDist){WavefieldMinDist=dist;}
+            // an offset function to modify the basic distance function
+            //double offset = 20*sin(3*2*M_PI*Curve.Components[i].knotcurve[s].integratedlength/Curve.length); 
+            double offset = 0; 
+            double distandoffset = dist+offset; 
+
+            if(distandoffset<WavefieldMinDistandOffset){WavefieldMinDistandOffset=distandoffset;}
 
             double ndotninfty = viewx*ninftyx + viewy*ninftyy + viewz*ninftyz;
             double tx = Curve.Components[i].knotcurve[s].tx;
@@ -139,7 +145,7 @@ double ComputeWavefieldOnePoint(const Link& Curve, const viewpoint& View)
     }
 
     double ScrollWavelength = 21.3;
-    double ScrollPhase = 0.5*totalomega +(2*M_PI/ScrollWavelength)*WavefieldMinDist;
+    double ScrollPhase = 0.5*totalomega +(2*M_PI/ScrollWavelength)*WavefieldMinDistandOffset;
 
     while(ScrollPhase>M_PI) ScrollPhase -= 2*M_PI;
     while(ScrollPhase<-M_PI) ScrollPhase += 2*M_PI;
